@@ -47,7 +47,7 @@ const config = {
   db: {
     host: mustGet("DB_HOST"),
     user: mustGet("DB_USER"),
-    password: mustGet("DB_PASSWORD"),
+    password: process.env.DB_PASSWORD ?? "",
     database: mustGet("DB_NAME"),
     port: toInt(process.env.DB_PORT, 3306),
     connectionLimit: toInt(process.env.DB_POOL_LIMIT, 10),
