@@ -1,478 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Connexion — BankDemo</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --gold: #b8965a;
-      --gold-light: #d4b07a;
-      --gold-pale: #f5edd8;
-      --dark: #0d0d0d;
-      --dark-2: #161616;
-      --dark-3: #1e1e1e;
-      --muted: #5a5a5a;
-      --text: #e8e0d4;
-      --text-dim: #8a8278;
-      --error: #c0504a;
-    }
-
-    html, body {
-      height: 100%;
-      background: var(--dark);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-    }
-
-    .page {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 480px;
-    }
-
-    /* ── LEFT PANEL ── */
-    .panel-left {
-      position: relative;
-      overflow: hidden;
-      background: var(--dark-2);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 60px;
-    }
-
-    .panel-left::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 30% 20%, rgba(184,150,90,0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 80% 80%, rgba(184,150,90,0.07) 0%, transparent 70%);
-    }
-
-    /* Decorative lines */
-    .deco-lines {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .deco-lines::before {
-      content: '';
-      position: absolute;
-      top: -10%; left: 15%;
-      width: 1px; height: 130%;
-      background: linear-gradient(to bottom, transparent, rgba(184,150,90,0.3) 30%, rgba(184,150,90,0.15) 70%, transparent);
-      transform: rotate(8deg);
-    }
-    .deco-lines::after {
-      content: '';
-      position: absolute;
-      top: -10%; left: 45%;
-      width: 1px; height: 130%;
-      background: linear-gradient(to bottom, transparent, rgba(184,150,90,0.1) 40%, transparent);
-      transform: rotate(8deg);
-    }
-
-    /* Large background monogram */
-    .monogram-bg {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(200px, 25vw, 380px);
-      font-weight: 300;
-      color: rgba(184,150,90,0.06);
-      letter-spacing: -0.05em;
-      line-height: 1;
-      user-select: none;
-      animation: floatBg 8s ease-in-out infinite;
-    }
-
-    @keyframes floatBg {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-50%, -52%) scale(1.02); }
-    }
-
-    .panel-left-content {
-      position: relative;
-      z-index: 1;
-    }
-
-    .tagline-small {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 11px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 20px;
-    }
-
-    .tagline-main {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(36px, 4vw, 58px);
-      font-weight: 300;
-      line-height: 1.15;
-      color: var(--text);
-      margin-bottom: 28px;
-    }
-
-    .tagline-main em {
-      font-style: italic;
-      color: var(--gold-light);
-    }
-
-    .divider-gold {
-      width: 48px;
-      height: 1px;
-      background: var(--gold);
-      margin-bottom: 24px;
-      opacity: 0.7;
-    }
-
-    .tagline-sub {
-      font-size: 14px;
-      color: var(--text-dim);
-      line-height: 1.7;
-      max-width: 340px;
-    }
-
-    /* ── RIGHT PANEL ── */
-    .panel-right {
-      background: var(--dark-3);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 60px 52px;
-      position: relative;
-      border-left: 1px solid rgba(184,150,90,0.12);
-    }
-
-    .panel-right::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      opacity: 0.6;
-    }
-
-    .logo-area {
-      margin-bottom: 52px;
-    }
-
-    .logo-mark {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .logo-icon {
-      width: 40px;
-      height: 40px;
-      border: 1px solid rgba(184,150,90,0.5);
-      border-radius: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    .logo-icon::before {
-      content: 'B';
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      font-weight: 300;
-      color: var(--gold);
-    }
-
-    .logo-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      font-weight: 300;
-      letter-spacing: 0.08em;
-      color: var(--text);
-    }
-
-    .logo-text span {
-      color: var(--gold);
-    }
-
-    .form-header {
-      margin-bottom: 36px;
-    }
-
-    .form-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 32px;
-      font-weight: 300;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .form-subtitle {
-      font-size: 13px;
-      color: var(--text-dim);
-    }
-
-    /* Error alert */
-    .alert-error {
-      background: rgba(192, 80, 74, 0.1);
-      border: 1px solid rgba(192, 80, 74, 0.3);
-      border-left: 3px solid var(--error);
-      border-radius: 2px;
-      padding: 12px 16px;
-      margin-bottom: 28px;
-      font-size: 13px;
-      color: #e07a76;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      animation: slideIn 0.3s ease;
-    }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .alert-error svg { flex-shrink: 0; }
-
-    /* Form fields */
-    .field {
-      margin-bottom: 24px;
-      position: relative;
-    }
-
-    label {
-      display: block;
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 10px;
-      transition: color 0.2s;
-    }
-
-    .field:focus-within label {
-      color: var(--gold-light);
-    }
-
-    .input-wrap {
-      position: relative;
-    }
-
-    .input-wrap svg {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      transition: color 0.2s;
-      pointer-events: none;
-    }
-
-    .field:focus-within .input-wrap svg {
-      color: var(--gold);
-    }
-
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 2px;
-      padding: 14px 14px 14px 42px;
-      font-size: 14px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-      letter-spacing: 0.02em;
-    }
-
-    input[type="email"]:focus,
-    input[type="password"]:focus {
-      border-color: rgba(184,150,90,0.5);
-      background: rgba(184,150,90,0.04);
-      box-shadow: 0 0 0 3px rgba(184,150,90,0.07);
-    }
-
-    input::placeholder {
-      color: var(--muted);
-      font-weight: 300;
-    }
-
-    /* Toggle password */
-    .toggle-pass {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: var(--muted);
-      background: none;
-      border: none;
-      padding: 2px;
-      transition: color 0.2s;
-    }
-    .toggle-pass:hover { color: var(--gold-light); }
-
-    /* Remember + Forgot row */
-    .form-extras {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 32px;
-      margin-top: -8px;
-    }
-
-    .remember-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      font-size: 12px;
-      color: var(--text-dim);
-      user-select: none;
-    }
-
-    .remember-label input[type="checkbox"] {
-      appearance: none;
-      width: 14px;
-      height: 14px;
-      border: 1px solid rgba(184,150,90,0.4);
-      border-radius: 1px;
-      background: transparent;
-      cursor: pointer;
-      position: relative;
-      transition: background 0.2s, border-color 0.2s;
-    }
-
-    .remember-label input[type="checkbox"]:checked {
-      background: var(--gold);
-      border-color: var(--gold);
-    }
-    .remember-label input[type="checkbox"]:checked::after {
-      content: '';
-      position: absolute;
-      top: 2px; left: 4px;
-      width: 4px; height: 7px;
-      border: 1.5px solid var(--dark);
-      border-top: none;
-      border-left: none;
-      transform: rotate(45deg);
-    }
-
-    .forgot-link {
-      font-size: 12px;
-      color: var(--text-dim);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .forgot-link:hover { color: var(--gold-light); }
-
-    /* Submit button */
-    .btn-submit {
-      width: 100%;
-      padding: 15px;
-      background: var(--gold);
-      border: none;
-      border-radius: 2px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--dark);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-    }
-
-    .btn-submit::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.4s ease;
-    }
-    .btn-submit:hover::before { left: 100%; }
-
-    .btn-submit:hover {
-      background: var(--gold-light);
-      box-shadow: 0 4px 24px rgba(184,150,90,0.3);
-    }
-    .btn-submit:active { transform: scale(0.99); }
-
-    /* Register link */
-    .register-row {
-      text-align: center;
-      margin-top: 28px;
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-
-    .register-row a {
-      color: var(--gold-light);
-      text-decoration: none;
-      font-weight: 400;
-      transition: color 0.2s;
-    }
-    .register-row a:hover { color: var(--text); }
-
-    /* Bottom ornament */
-    .bottom-ornament {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 44px;
-    }
-    .orn-line {
-      flex: 1;
-      height: 1px;
-      background: rgba(184,150,90,0.15);
-    }
-    .orn-diamond {
-      width: 4px; height: 4px;
-      background: var(--gold);
-      transform: rotate(45deg);
-      opacity: 0.5;
-    }
-
-    /* Animations */
-    .panel-right > * {
-      animation: fadeUp 0.5s ease both;
-    }
-    .panel-right > *:nth-child(1) { animation-delay: 0.05s; }
-    .panel-right > *:nth-child(2) { animation-delay: 0.12s; }
-    .panel-right > *:nth-child(3) { animation-delay: 0.18s; }
-    .panel-right > *:nth-child(4) { animation-delay: 0.25s; }
-    .panel-right > *:nth-child(5) { animation-delay: 0.3s; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Responsive */
-    @media (max-width: 860px) {
-      .page { grid-template-columns: 1fr; }
-      .panel-left { display: none; }
-      .panel-right { padding: 48px 32px; }
-    }
-  </style>
+  <%- include('partials/head') %>
 </head>
 <body>
 
-<div class="page">
+<div class="login-page">
 
   <!-- LEFT PANEL -->
   <div class="panel-left">
@@ -491,8 +25,8 @@
 
     <div class="logo-area">
       <div class="logo-mark">
-        <div class="logo-icon"></div>
-        <div class="logo-text">Bank</div>
+        <div class="login-logo-icon">B</div>
+        <div class="login-logo-text">Bank<span>Demo</span></div>
       </div>
     </div>
 
@@ -503,8 +37,8 @@
 
     <% if (error) { %>
     <div class="alert-error">
-      <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M7.5 1L14 13H1L7.5 1Z" stroke="currentColor" stroke-width="1.2" fill="none"/>
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <path d="M7.5 1L14 13H1L7.5 1Z" stroke="currentColor" stroke-width="1.2"/>
         <line x1="7.5" y1="5.5" x2="7.5" y2="9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
         <circle cx="7.5" cy="11" r="0.6" fill="currentColor"/>
       </svg>
@@ -514,26 +48,26 @@
 
     <form action="/login" method="POST">
 
-      <div class="field">
+      <div class="login-field">
         <label for="email">Adresse e-mail</label>
-        <div class="input-wrap">
+        <div class="login-input-wrap">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
             <rect x="1" y="3" width="13" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/>
             <path d="M1 4L7.5 8.5L14 4" stroke="currentColor" stroke-width="1.2"/>
           </svg>
-          <input type="email" id="email" name="email" placeholder="exemple@banque.fr" autocomplete="email" required />
+          <input type="email" id="email" name="email" placeholder="exemple@banque.fr" autocomplete="email" required/>
         </div>
       </div>
 
-      <div class="field">
+      <div class="login-field">
         <label for="password">Mot de passe</label>
-        <div class="input-wrap">
+        <div class="login-input-wrap">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
             <rect x="3" y="6" width="9" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/>
             <path d="M5 6V4.5a2.5 2.5 0 0 1 5 0V6" stroke="currentColor" stroke-width="1.2"/>
             <circle cx="7.5" cy="9.5" r="1" fill="currentColor"/>
           </svg>
-          <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required />
+          <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required/>
           <button type="button" class="toggle-pass" onclick="togglePassword()" aria-label="Afficher le mot de passe">
             <svg id="eye-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5Z" stroke="currentColor" stroke-width="1.2"/>
@@ -551,7 +85,7 @@
         <a href="/forgot-password" class="forgot-link">Mot de passe oublié ?</a>
       </div>
 
-      <button type="submit" class="btn-submit">Accéder à mon espace</button>
+      <button type="submit" class="login-btn-submit">Accéder à mon espace</button>
 
     </form>
 
@@ -571,10 +105,10 @@
 <script>
   function togglePassword() {
     const input = document.getElementById('password');
-    const icon = document.getElementById('eye-icon');
-    const isHidden = input.type === 'password';
-    input.type = isHidden ? 'text' : 'password';
-    icon.innerHTML = isHidden
+    const icon  = document.getElementById('eye-icon');
+    const hide  = input.type === 'password';
+    input.type  = hide ? 'text' : 'password';
+    icon.innerHTML = hide
       ? `<path d="M2 2l12 12M6.5 6.6A2 2 0 0 0 8 10a2 2 0 0 0 1.4-3.4M4.2 4.3C2.6 5.4 1 8 1 8s2.5 5 7 5c1.4 0 2.6-.4 3.7-1M10.6 6A2 2 0 0 1 8 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M11.8 11.7C13.4 10.6 15 8 15 8s-2.5-5-7-5c-.5 0-1 .06-1.5.18" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>`
       : `<path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5Z" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/>`;
   }
