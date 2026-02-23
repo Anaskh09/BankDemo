@@ -10,7 +10,6 @@
 
   <%- include('partials/navbar', { activePage: 'transfer' }) %>
 
-  <!-- ══════════ MAIN ══════════ -->
   <div class="main">
 
     <header class="topbar">
@@ -49,7 +48,6 @@
         <div class="form-body">
 
           <% if (success) { %>
-          <!-- ── SUCCESS STATE ── -->
           <div class="result-card">
             <div class="result-icon success">
               <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -62,40 +60,12 @@
               Il apparaîtra dans votre historique de transactions.
             </p>
             <div class="result-actions">
-              <a href="/transactions" class="btn-outline">
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4">
-                  <path d="M1 6.5h10M8 3l3 3.5L8 10"/>
-                </svg>
-                Voir les transactions
-              </a>
-              <a href="/transfer" class="btn-solid">
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4">
-                  <path d="M6.5 1v12M1 6.5h12"/>
-                </svg>
-                Nouveau virement
-              </a>
+              <a href="/transactions" class="btn-outline">Voir les transactions</a>
+              <a href="/transfer" class="btn-solid">Nouveau virement</a>
             </div>
           </div>
 
           <% } else { %>
-
-          <!-- ── Steps ── -->
-          <div class="steps">
-            <div class="step active">
-              <div class="step-num">1</div>
-              <span>Détails</span>
-            </div>
-            <div class="step-line"></div>
-            <div class="step">
-              <div class="step-num">2</div>
-              <span>Confirmation</span>
-            </div>
-            <div class="step-line"></div>
-            <div class="step">
-              <div class="step-num">3</div>
-              <span>Exécution</span>
-            </div>
-          </div>
 
           <% if (error) { %>
           <div class="alert error">
@@ -107,7 +77,7 @@
           </div>
           <% } %>
 
-          <form action="/transfer" method="POST" id="transferForm" onsubmit="return confirmTransfer()">
+          <form action="/transfer" method="POST" id="transferForm">
 
             <!-- Beneficiary -->
             <div class="field">
@@ -124,9 +94,6 @@
                   id="beneficiary"
                   name="beneficiary"
                   placeholder="Nom du bénéficiaire ou établissement"
-                  autocomplete="off"
-                  required
-                  maxlength="120"
                   oninput="updateRecap()"
                 />
               </div>
@@ -145,13 +112,10 @@
                   </svg>
                 </span>
                 <input
-                  type="number"
+                  type="text"
                   id="amount"
                   name="amount"
                   placeholder="0.00"
-                  min="0.01"
-                  step="0.01"
-                  required
                   oninput="updateRecap()"
                 />
                 <span class="amount-currency">MAD</span>
@@ -180,7 +144,6 @@
                   id="note"
                   name="note"
                   placeholder="Loyer, facture, remboursement…"
-                  maxlength="255"
                   oninput="updateRecap()"
                 ></textarea>
               </div>
@@ -206,7 +169,6 @@
 
         </div>
       </div>
-      <!-- end form-card -->
 
       <!-- ═══ RIGHT COLUMN ═══ -->
       <div class="transfer-right-col">
@@ -284,30 +246,25 @@
         </div>
 
       </div>
-      <!-- end right-col -->
 
-    </div><!-- end transfer-body -->
-  </div><!-- end main -->
-</div><!-- end layout -->
+    </div>
+  </div>
+</div>
 
 <%- include('partials/footer') %>
 
 <script>
-  /* ── Quick amount setter ── */
   function setAmount(val) {
     const input = document.getElementById('amount');
     if (!input) return;
     input.value = val;
     input.dispatchEvent(new Event('input'));
-    input.style.borderColor = 'rgba(184,150,90,0.6)';
-    setTimeout(() => input.style.borderColor = '', 600);
   }
 
-  /* ── Live recap update ── */
   function updateRecap() {
-    const benef  = document.getElementById('beneficiary')?.value?.trim() || '';
+    const benef  = document.getElementById('beneficiary')?.value || '';
     const amount = parseFloat(document.getElementById('amount')?.value || 0);
-    const note   = document.getElementById('note')?.value?.trim() || '';
+    const note   = document.getElementById('note')?.value || '';
 
     const recapBenef  = document.getElementById('recapBenef');
     const recapAmount = document.getElementById('recapAmount');
@@ -324,29 +281,6 @@
         recapAmount.style.color = 'var(--text-dim)';
       }
     }
-  }
-
-  /* ── Confirm before submit ── */
-  function confirmTransfer() {
-    const benef  = document.getElementById('beneficiary')?.value?.trim();
-    const amount = parseFloat(document.getElementById('amount')?.value || 0);
-    if (!benef || amount <= 0) return true;
-
-    const formatted = amount.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    const ok = window.confirm(`Confirmer le virement de ${formatted} MAD vers "${benef}" ?`);
-    if (ok) {
-      const btn = document.getElementById('submitBtn');
-      if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = `
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="animation:spin 1s linear infinite">
-            <circle cx="8" cy="8" r="6" stroke-dasharray="28" stroke-dashoffset="10"/>
-          </svg>
-          Traitement…
-        `;
-      }
-    }
-    return ok;
   }
 </script>
 

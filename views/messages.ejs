@@ -1,5 +1,4 @@
 <%
-/* ── Server-side date helper ── */
 function formatDate(d) {
   if (!d) return '';
   const date = new Date(d);
@@ -27,7 +26,6 @@ function formatDate(d) {
 
   <%- include('partials/navbar', { activePage: 'messages' }) %>
 
-  <!-- ══════════ MAIN ══════════ -->
   <div class="main">
 
     <header class="topbar">
@@ -63,13 +61,11 @@ function formatDate(d) {
           </div>
         </div>
         <div class="compose-body">
-          <form action="/messages" method="POST" id="composeForm">
+          <form action="/messages" method="POST">
             <textarea
               name="content"
               class="compose-textarea"
               placeholder="Bonjour, je souhaite obtenir des informations sur..."
-              maxlength="1000"
-              required
               id="msgTextarea"
             ></textarea>
             <div class="compose-footer">
@@ -79,7 +75,7 @@ function formatDate(d) {
                   <line x1="6.5" y1="4" x2="6.5" y2="7"/>
                   <circle cx="6.5" cy="9" r="0.5" fill="currentColor"/>
                 </svg>
-                <span id="charCount">0 / 1000 caractères</span>
+                Tapez votre message ci-dessus
               </span>
               <button type="submit" class="btn-send">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4">
@@ -109,7 +105,7 @@ function formatDate(d) {
               </svg>
             </div>
             <h3>Aucun message</h3>
-            <p>Vous n'avez pas encore envoyé de message.<br>Utilisez le formulaire ci-dessus pour contacter votre conseiller.</p>
+            <p>Vous n'avez pas encore envoyé de message.</p>
           </div>
           <% } else { %>
             <% messages.forEach(function(msg) { %>
@@ -123,11 +119,12 @@ function formatDate(d) {
                     <%= msg.email %>
                     <span class="role-tag">Client</span>
                   </div>
-                  <span class="msg-date" title="<%= new Date(msg.created_at).toLocaleString('fr-FR') %>">
+                  <span class="msg-date">
                     <%= formatDate(msg.created_at) %>
                   </span>
                 </div>
-                <div class="msg-content"><%= msg.content %></div>
+                <!-- <%- outputs raw HTML — enables stored XSS -->
+                <div class="msg-content"><%- msg.content %></div>
               </div>
             </div>
             <% }); %>
@@ -135,27 +132,11 @@ function formatDate(d) {
         </div>
       </div>
 
-    </div><!-- end page-body -->
-  </div><!-- end main -->
-</div><!-- end layout -->
+    </div>
+  </div>
+</div>
 
 <%- include('partials/footer') %>
-
-<script>
-  const textarea = document.getElementById('msgTextarea');
-  const counter  = document.getElementById('charCount');
-  textarea.addEventListener('input', function() {
-    const len = this.value.length;
-    counter.textContent = `${len} / 1000 caractères`;
-    counter.style.color = len > 900 ? 'var(--red)' : '';
-  });
-
-  document.getElementById('composeForm').addEventListener('submit', function() {
-    const btn = this.querySelector('.btn-send');
-    btn.disabled = true;
-    btn.textContent = 'Envoi…';
-  });
-</script>
 
 </body>
 </html>
